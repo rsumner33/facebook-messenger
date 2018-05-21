@@ -162,7 +162,7 @@ module Facebook
           next unless entry['messaging'.freeze]
           # Facebook may batch several items in the 'messaging' array during
           # periods of high load.
-          entry['messaging'.freeze].each do |messaging|
+          entry['messaging'.freeze].try(:each) do |messaging|
             Facebook::Messenger::Bot.receive(messaging)
           end
         end
