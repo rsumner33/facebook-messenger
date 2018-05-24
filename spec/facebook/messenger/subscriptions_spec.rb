@@ -1,20 +1,12 @@
 require 'spec_helper'
 
 describe Facebook::Messenger::Subscriptions do
-  let(:access_token) { 'access token' }
-
-  let(:subscribed_apps_url) do
-    Facebook::Messenger::Subscriptions.base_uri + '/subscribed_apps'
-  end
-
-  before do
-    ENV['ACCESS_TOKEN'] = access_token
-  end
-
   describe '.subscribe' do
+    let(:access_token) { '<access token>' }
+
     context 'with a successful response' do
       before do
-        stub_request(:post, subscribed_apps_url)
+        stub_request(:post, Facebook::Messenger::Subscriptions::URL)
           .with(query: { access_token: access_token })
           .to_return(
             body: JSON.dump('success' => true),
@@ -24,7 +16,7 @@ describe Facebook::Messenger::Subscriptions do
       end
 
       it 'returns true' do
-        expect(subject.subscribe(access_token: access_token)).to be true
+        expect(subject.subscribe(access_token)).to be true
       end
     end
 
@@ -32,7 +24,7 @@ describe Facebook::Messenger::Subscriptions do
       let(:error_message) { 'Invalid OAuth access token.' }
 
       before do
-        stub_request(:post, subscribed_apps_url)
+        stub_request(:post, Facebook::Messenger::Subscriptions::URL)
           .with(query: { access_token: access_token })
           .to_return(
             body: JSON.dump(
@@ -49,9 +41,7 @@ describe Facebook::Messenger::Subscriptions do
       end
 
       it 'raises an error' do
-        expect do
-          subject.subscribe(access_token: access_token)
-        end.to raise_error(
+        expect { subject.subscribe(access_token) }.to raise_error(
           Facebook::Messenger::Subscriptions::Error, error_message
         )
       end
@@ -59,9 +49,11 @@ describe Facebook::Messenger::Subscriptions do
   end
 
   describe '.unsubscribe' do
+    let(:access_token) { '<access token>' }
+
     context 'with a successful response' do
       before do
-        stub_request(:delete, subscribed_apps_url)
+        stub_request(:delete, Facebook::Messenger::Subscriptions::URL)
           .with(query: { access_token: access_token })
           .to_return(
             body: JSON.dump('success' => true),
@@ -71,7 +63,7 @@ describe Facebook::Messenger::Subscriptions do
       end
 
       it 'returns true' do
-        expect(subject.unsubscribe(access_token: access_token)).to be true
+        expect(subject.unsubscribe(access_token)).to be true
       end
     end
 
@@ -79,7 +71,7 @@ describe Facebook::Messenger::Subscriptions do
       let(:error_message) { 'Invalid OAuth access token.' }
 
       before do
-        stub_request(:delete, subscribed_apps_url)
+        stub_request(:delete, Facebook::Messenger::Subscriptions::URL)
           .with(query: { access_token: access_token })
           .to_return(
             body: JSON.dump(
@@ -96,9 +88,7 @@ describe Facebook::Messenger::Subscriptions do
       end
 
       it 'raises an error' do
-        expect do
-          subject.unsubscribe(access_token: access_token)
-        end.to raise_error(
+        expect { subject.unsubscribe(access_token) }.to raise_error(
           Facebook::Messenger::Subscriptions::Error, error_message
         )
       end
