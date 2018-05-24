@@ -9,7 +9,6 @@ require 'facebook/messenger/incoming/read'
 require 'facebook/messenger/incoming/account_linking'
 require 'facebook/messenger/incoming/referral'
 require 'facebook/messenger/incoming/payment'
-require 'facebook/messenger/incoming/policy_enforcement'
 
 module Facebook
   module Messenger
@@ -30,8 +29,7 @@ module Facebook
         'referral' => Referral,
         'message_echo' => MessageEcho,
         'message_request' => MessageRequest,
-        'payment' => Payment,
-        'policy_enforcement' => PolicyEnforcement
+        'payment' => Payment
       }.freeze
 
       # Parse the given payload and create new object of class related
