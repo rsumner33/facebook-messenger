@@ -26,7 +26,7 @@ module Facebook
         @request = Rack::Request.new(env)
         @response = Rack::Response.new
 
-        if @request.get?
+        if @request.get?        # Verify the endpoint for verification request.
           verify
         elsif @request.post?
           receive
